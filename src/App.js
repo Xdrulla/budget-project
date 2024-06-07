@@ -9,7 +9,7 @@ import AppMenu from './components/Menu'
 import { logout } from './services/auth'
 import { Button } from 'antd'
 import { BulbOutlined } from '@ant-design/icons'
-import MonthlyAverageChart from './components/MonthlyAverageChart'
+import MonthlyAverageChart from './pages/MonthlyAverageChart'
 
 const App = () => {
   const [user, setUser] = useState(null)
