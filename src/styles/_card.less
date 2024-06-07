@@ -1,0 +1,148 @@
+.ant-card {
+  background-color: #ffffff !important;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 800px;
+
+  &-head-title,
+  .ant-form-item-label > label {
+    color: @primary-color !important;
+  }
+
+  .ant-input-number,
+  .ant-picker,
+  .ant-input {
+    width: 100%;
+  }
+
+  .ant-input-number input,
+  .ant-input input,
+  .ant-picker input {
+    color: #000000 !important;
+  }
+
+  .ant-btn-primary {
+    background-color: @primary-color !important;
+    border-color: @primary-color !important;
+    left: 165px;
+  }
+
+  .ant-btn-danger {
+    background-color: #ff4d4f !important;
+    border-color: #ff4d4f !important;
+  }
+}
+
+.dark-mode .ant-card {
+  background-color: @secondary-color !important;
+  color: #fff;
+}
+
+.dark-mode .ant-btn-primary {
+  background-color: @primary-color !important;
+  border-color: @primary-color !important;
+}
+
+.dark-mode .ant-btn-danger {
+  background-color: #ff4d4f !important;
+  border-color: #ff4d4f !important;
+}
+
+.dark-mode .ant-checkbox-wrapper {
+  color: #fff !important;
+}
+
+/* Media Queries */
+@media (max-width: 768px) {
+  .App-header {
+    padding: 10px;
+  }
+
+  .ant-card {
+    padding: 10px;
+  }
+
+  .login-box {
+    padding: 20px;
+  }
+
+  .ant-btn-primary {
+    width: 100%;
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 576px) {
+  .sidebar {
+    width: 100%;
+    height: auto;
+    position: relative;
+    padding: 10px 0;
+  }
+
+  .content {
+    padding: 10px;
+  }
+
+  .header {
+    padding: 10px;
+  }
+
+  .ant-card {
+    padding: 10px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .login-box {
+    padding: 10px;
+  }
+
+  .user-box input {
+    font-size: 14px;
+  }
+
+  form .submit-button {
+    font-size: 14px;
+  }
+
+  .ant-btn-primary {
+    width: 100%;
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 360px) {
+  .sidebar {
+    padding: 5px 0;
+  }
+
+  .content {
+    padding: 5px;
+  }
+
+  .header {
+    padding: 5px;
+  }
+
+  .ant-card {
+    padding: 5px;
+  }
+
+  .login-box {
+    padding: 5px;
+  }
+
+  .user-box input {
+    font-size: 12px;
+  }
+
+  form .submit-button {
+    font-size: 12px;
+  }
+
+  .ant-btn-primary {
+    width: 100%;
+    margin-left: 0;
+  }
+}

@@ -1,0 +1,158 @@
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+html.light-mode {
+  background-color: @light-background;
+}
+
+html.dark-mode {
+  background-color: @dark-background;
+}
+
+.App {
+  display: flex;
+  min-height: 100vh;
+}
+
+.sidebar {
+  width: @sidebar-width;
+  background-color: @secondary-color;
+  z-index: 10000;
+  position: fixed;
+  padding-top: 200px;
+  padding-bottom: 100%;
+}
+
+.content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  color: #000;
+
+  &.dark-mode {
+    color: #fff;
+  }
+}
+
+.header {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  padding: 20px;
+  box-sizing: border-box;
+  position: fixed;
+  top: 0;
+  right: 0;
+}
+
+.user-profile {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  margin-top: 10px;
+
+  .ant-avatar {
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    font-size: 24px;
+  }
+}
+
+.ant-checkbox-wrapper {
+  &.light-mode {
+    color: #000;
+  }
+
+  &.dark-mode {
+    color: #fff !important;
+  }
+}
+
+/* Media Queries */
+@media (max-width: 768px) {
+  .App-header {
+    padding: 10px;
+  }
+
+  .ant-card {
+    padding: 10px;
+  }
+
+  .login-box {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 576px) {
+  .sidebar {
+    width: 100%;
+    height: auto;
+    position: relative;
+    padding: 10px 0;
+  }
+
+  .content {
+    padding: 10px;
+  }
+
+  .header {
+    padding: 10px;
+  }
+
+  .ant-card {
+    padding: 10px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .login-box {
+    padding: 10px;
+  }
+
+  .user-box input {
+    font-size: 14px;
+  }
+
+  form .submit-button {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 360px) {
+  .sidebar {
+    padding: 5px 0;
+  }
+
+  .content {
+    padding: 5px;
+  }
+
+  .header {
+    padding: 5px;
+  }
+
+  .ant-card {
+    padding: 5px;
+  }
+
+  .login-box {
+    padding: 5px;
+  }
+
+  .user-box input {
+    font-size: 12px;
+  }
+
+  form .submit-button {
+    font-size: 12px;
+  }
+}
