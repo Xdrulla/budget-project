@@ -3,10 +3,16 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     match /budgets/{documentId} {
+      // Permitir leitura se o usuário estiver autenticado e for o proprietário do documento
       allow read: if request.auth != null && request.auth.uid == resource.data.userId;
-        allow write: if request.auth != null && (
+      
+      // Permitir escrita (criação e atualização) se o usuário estiver autenticado
+      // e for o proprietário do documento ou o documento não existir (criação)
+      allow write: if request.auth != null && (
         !exists(resource) || request.auth.uid == request.resource.data.userId
       );
+      
+      // Permitir exclusão se o usuário estiver autenticado e for o proprietário do documento
       allow delete: if request.auth != null && request.auth.uid == resource.data.userId;
     }
   }

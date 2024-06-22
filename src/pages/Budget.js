@@ -86,20 +86,25 @@ const Budget = ({ isDarkMode }) => {
 
     if (!querySnapshot.empty) {
       const docId = querySnapshot.docs[0].id
-      await deleteDoc(doc(db, 'budgets', docId))
-      message.sucess(ReactSwal.fire({
-        title: 'Sucesso',
-        html: 'Orçamento deletado com sucesso!',
-        icon: 'success',
-        customClass: {
-          icon: 'border-0',
-        }
-      }))
-      setSalary(0)
-      setApplyDiscount(false)
-      setOtherIncome(0)
-      setExpenses([{ id: uuidv4(), name: '', value: 0, fixed: false }])
-      setMonth(null)
+      try {
+        await deleteDoc(doc(db, 'budgets', docId))
+        ReactSwal.fire({
+          title: 'Sucesso',
+          html: 'Orçamento deletado com sucesso!',
+          icon: 'success',
+          customClass: {
+            icon: 'border-0',
+          }
+        })
+        setSalary(0)
+        setApplyDiscount(false)
+        setOtherIncome(0)
+        setExpenses([{ id: uuidv4(), name: '', value: 0, fixed: false }])
+        setMonth(null)
+      } catch (error) {
+        console.error('Erro ao deletar o documento:', error)
+        message.error('Erro ao deletar')
+      }
     } else {
       message.error('Erro ao deletar')
     }
