@@ -1,6 +1,6 @@
-import React from 'react'
-import { BarChartOutlined, PieChartOutlined, LineChartOutlined } from '@ant-design/icons'
-import { Menu } from 'antd'
+import React, { useState } from 'react'
+import { BarChartOutlined, PieChartOutlined, LineChartOutlined, MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons'
+import { Menu, Button } from 'antd'
 import { Link } from 'react-router-dom'
 
 const items = [
@@ -17,14 +17,23 @@ const items = [
   {
     key: '3',
     icon: <BarChartOutlined />,
-    label: <Link>Options 3</Link>,
+    label: <Link to="/options3">Options 3</Link>,
   },
 ]
 
 const AppMenu = () => {
+  const [collapsed, setCollapsed] = useState(false)
+
+  const toggleCollapsed = () => {
+    setCollapsed(!collapsed)
+  }
+
   return (
-    <div style={{ width: 256 }}>
-      <Menu defaultSelectedKeys={['1']} mode="inline" theme="dark" items={items} />
+    <div className={`sidebar ${collapsed ? 'collapsed' : ''}`}>
+      <Button type="primary" onClick={toggleCollapsed} className="menu-toggle-button">
+        {collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+      </Button>
+      <Menu defaultSelectedKeys={['1']} mode="inline" theme="dark" items={items} inlineCollapsed={collapsed} />
     </div>
   )
 }

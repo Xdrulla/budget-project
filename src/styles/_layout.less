@@ -19,12 +19,30 @@ html.dark-mode {
 }
 
 .sidebar {
-  width: @sidebar-width;
+  width: var(--sidebar-width);
   background-color: @secondary-color;
   z-index: 10000;
   position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
   padding-top: 200px;
   padding-bottom: 100%;
+  transition: width 0.3s;
+  overflow: hidden;
+}
+
+.sidebar.collapsed {
+  width: 80px;
+  padding-top: 200px;
+  padding-bottom: 100%;
+}
+
+.menu-toggle-button {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  margin: 16px;
 }
 
 .content {
@@ -35,10 +53,16 @@ html.dark-mode {
   justify-content: center;
   padding: 20px;
   color: #000;
+  margin-left: var(--sidebar-width);
+  transition: margin-left 0.3s;
 
   &.dark-mode {
     color: #fff;
   }
+}
+
+.sidebar.collapsed + .content {
+  margin-left: 80px;
 }
 
 .header {
@@ -58,13 +82,13 @@ html.dark-mode {
   gap: 10px;
   cursor: pointer;
   margin-top: 10px;
+}
 
-  .ant-avatar {
-    width: 40px;
-    height: 40px;
-    line-height: 40px;
-    font-size: 24px;
-  }
+.user-profile .ant-avatar {
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
+  font-size: 24px;
 }
 
 .ant-checkbox-wrapper {
@@ -100,7 +124,12 @@ html.dark-mode {
     padding: 10px 0;
   }
 
+  .sidebar.collapsed {
+    width: 80px;
+  }
+
   .content {
+    margin-left: 0;
     padding: 10px;
   }
 
