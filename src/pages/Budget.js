@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react'
+import ReactSwal from '../components/common/ReactSwal'
 import { Form, Input, InputNumber, Switch, Button, Row, Col, DatePicker, Card, Typography, message, Checkbox } from 'antd'
 import { PlusOutlined, MinusCircleOutlined } from '@ant-design/icons'
 import { db } from '../services/firebase'
-import { collection, addDoc, getDocs, query, where, limit } from "firebase/firestore"
+import { collection, addDoc, getDocs, query, where, limit, doc, deleteDoc } from 'firebase/firestore'
 import { getAuth } from 'firebase/auth'
 import dayjs from 'dayjs'
 import { v4 as uuidv4 } from 'uuid'
@@ -64,6 +65,46 @@ const Budget = ({ isDarkMode }) => {
     setExpenses(newExpenses)
   }
 
+  const handleDelete = async () => {
+    if (!month) {
+      ReactSwal.fire({
+        title: 'Erro ao deletar!',
+        html: 'Você não pode deletar algo sem selecionar um mês!',
+        icon: 'error',
+        customClass: {
+          icon: 'border-0',
+        }
+      })
+      return
+    }
+
+    const formattedDate = dayjs(month).format('YYYY/MM')
+
+    const budgetRef = collection(db, 'budgets')
+    const q = query(budgetRef, where('month', '==', formattedDate), where('userId', '==', user.uid), limit(1))
+    const querySnapshot = await getDocs(q)
+
+    if (!querySnapshot.empty) {
+      const docId = querySnapshot.docs[0].id
+      await deleteDoc(doc(db, 'budgets', docId))
+      message.sucess(ReactSwal.fire({
+        title: 'Sucesso',
+        html: 'Orçamento deletado com sucesso!',
+        icon: 'success',
+        customClass: {
+          icon: 'border-0',
+        }
+      }))
+      setSalary(0)
+      setApplyDiscount(false)
+      setOtherIncome(0)
+      setExpenses([{ id: uuidv4(), name: '', value: 0, fixed: false }])
+      setMonth(null)
+    } else {
+      message.error('Erro ao deletar')
+    }
+  }
+
   const addExpense = () => {
     setExpenses([...expenses, { id: uuidv4(), name: '', value: 0, fixed: false }])
   }
@@ -75,12 +116,12 @@ const Budget = ({ isDarkMode }) => {
 
   const handleMonthChange = async (date) => {
     if (!user) {
-      console.error("Usuário não está autenticado.")
+      console.error('Usuário não está autenticado.')
       return
     }
 
     if (!date) {
-      console.error("Data inválida selecionada.")
+      console.error('Data inválida selecionada.')
       return
     }
 
@@ -105,7 +146,7 @@ const Budget = ({ isDarkMode }) => {
 
         if (!queryPreviousSnapshot.empty) {
           const previousBudgetData = queryPreviousSnapshot.docs[0].data()
-          const fixedExpenses = previousBudgetData.expenses.filter(expense => expense.fixed)
+          const fixedExpenses = previousBudgetData.expenses.filter((expense) => expense.fixed)
           setExpenses(fixedExpenses)
         } else {
           setExpenses([{ id: uuidv4(), name: '', value: 0, fixed: false }])
@@ -116,7 +157,7 @@ const Budget = ({ isDarkMode }) => {
         setOtherIncome(0)
       }
     } catch (error) {
-      console.error("Erro ao recuperar orçamento:", error)
+      console.error('Erro ao recuperar orçamento:', error)
       message.error('Erro ao recuperar orçamento!')
     }
   }
@@ -138,13 +179,16 @@ const Budget = ({ isDarkMode }) => {
       await addDoc(collection(db, 'budgets'), budgetData)
       message.success('Orçamento salvo com sucesso!')
     } catch (err) {
-      console.error("Erro ao salvar orçamento:", err)
+      console.error('Erro ao salvar orçamento:', err)
       message.error('Erro ao salvar orçamento!')
     }
   }
 
   return (
-    <Card className={isDarkMode ? 'dark-mode' : ''} style={{ maxWidth: 800, margin: '0 auto', backgroundColor: '#ffffff', borderRadius: '8px', padding: '20px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}>
+    <Card
+      className={isDarkMode ? 'dark-mode' : ''}
+      style={{ maxWidth: 800, margin: '0 auto', backgroundColor: '#ffffff', borderRadius: '8px', padding: '20px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}
+    >
       <Title level={2} style={{ textAlign: 'center', color: '#1890ff' }}>Orçamento Mensal</Title>
       <Form layout="vertical">
         <Row gutter={16}>
@@ -154,8 +198,8 @@ const Budget = ({ isDarkMode }) => {
                 style={{ width: '100%' }}
                 value={salary}
                 onChange={handleSalaryChange}
-                formatter={value => `R$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                parser={value => value.replace(/R\$\s?|(,*)/g, '')}
+                formatter={(value) => `R$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                parser={(value) => value.replace(/R\$\s?|(,*)/g, '')}
               />
             </Form.Item>
           </Col>
@@ -172,8 +216,8 @@ const Budget = ({ isDarkMode }) => {
                 style={{ width: '100%' }}
                 value={otherIncome}
                 onChange={handleOtherIncomeChange}
-                formatter={value => `R$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                parser={value => value.replace(/R\$\s?|(,*)/g, '')}
+                formatter={(value) => `R$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                parser={(value) => value.replace(/R\$\s?|(,*)/g, '')}
               />
             </Form.Item>
           </Col>
@@ -183,18 +227,13 @@ const Budget = ({ isDarkMode }) => {
                 style={{ width: '100%' }}
                 value={totalIncome}
                 readOnly
-                formatter={value => `R$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                formatter={(value) => `R$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
               />
             </Form.Item>
           </Col>
         </Row>
         <Form.Item label="Mês do Orçamento">
-          <DatePicker
-            picker="month"
-            onChange={handleMonthChange}
-            style={{ width: '100%' }}
-            format="YYYY-MM"
-          />
+          <DatePicker picker="month" onChange={handleMonthChange} style={{ width: '100%' }} format="YYYY-MM" />
         </Form.Item>
         <Form.Item label="Contas">
           {expenses.map((expense, index) => (
@@ -212,8 +251,8 @@ const Budget = ({ isDarkMode }) => {
                   style={{ width: '100%' }}
                   value={expense.value}
                   onChange={(value) => handleExpenseChange(index, 'value', value)}
-                  formatter={value => `R$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                  parser={value => value.replace(/R\$\s?|(,*)/g, '')}
+                  formatter={(value) => `R$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                  parser={(value) => value.replace(/R\$\s?|(,*)/g, '')}
                 />
               </Col>
               <Col xs={12} sm={4}>
@@ -248,7 +287,7 @@ const Budget = ({ isDarkMode }) => {
             style={{ width: '100%' }}
             value={totalExpenses}
             readOnly
-            formatter={value => `R$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+            formatter={(value) => `R$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
           />
         </Form.Item>
         <Form.Item label="Saldo Restante">
@@ -256,20 +295,19 @@ const Budget = ({ isDarkMode }) => {
             style={{ width: '100%' }}
             value={remainingBalance}
             readOnly
-            formatter={value => `R$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+            formatter={(value) => `R$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
           />
         </Form.Item>
-        <Row gutter={16}>
-          <Col xs={24} sm={12}>
-            <Button type="primary" onClick={handleSubmit} style={{ width: '100%' }}>
-              Salvar Orçamento
-            </Button>
-          </Col>
+        <Row gutter={16} className="button-container">
+          <Button type="primary" onClick={handleSubmit}>
+            Salvar Orçamento
+          </Button>
+          <Button type="primary" danger onClick={handleDelete}>
+            Deletar Orçamento
+          </Button>
         </Row>
       </Form>
-      {month && (
-        <ExpenseChart data={expenses.map(exp => ({ name: exp.name, value: exp.value }))} />
-      )}
+      {month && <ExpenseChart data={expenses.map((exp) => ({ name: exp.name, value: exp.value }))} />}
     </Card>
   )
 }
