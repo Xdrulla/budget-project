@@ -12,7 +12,6 @@ import BudgetForm from './Budget/BudgetForm';
 import TotalInfo from './Budget/TotalInfo';
 import CategoryExpenseList from './Budget/CategoryExepenseList';
 
-
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const { Title } = Typography;
@@ -174,12 +173,18 @@ const Budget = ({ isDarkMode }) => {
     }
   };
 
+  const generateColor = () => {
+    const randomColor = () =>
+      `#${Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0')}`;
+    return expenses.map(() => randomColor());
+  };
+
   const data = {
     labels: expenses.map((exp) => exp.name),
     datasets: [
       {
         data: expenses.map((exp) => exp.value),
-        backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF'],
+        backgroundColor: generateColor(),
       },
     ],
   };
