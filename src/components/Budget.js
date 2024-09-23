@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { Card, Form, Typography, Row, Col, Button, message } from 'antd'
 import { v4 as uuidv4 } from 'uuid'
 import { db } from '../services/firebase'
@@ -20,11 +20,18 @@ const Budget = ({ isDarkMode }) => {
   const [salary, setSalary] = useState(0)
   const [otherIncome, setOtherIncome] = useState(0)
   const [applyDiscount, setApplyDiscount] = useState(false)
-  const [expenses, setExpenses] = useState([{ id: uuidv4(), name: '', value: 0, fixed: false }])
+  const [colors, setColors] = useState({})
+  const [expenses, setExpenses] = useState({
+    Moradia: [],
+    Transporte: [],
+    Educação: [],
+    Lazer: []
+  })
   const [month, setMonth] = useState(null)
   const [totalIncome, setTotalIncome] = useState(0)
   const [totalExpenses, setTotalExpenses] = useState(0)
   const [remainingBalance, setRemainingBalance] = useState(0)
+  const allExpenses = Object.values(expenses).flat()
 
   const auth = getAuth()
   const user = auth.currentUser
@@ -39,7 +46,9 @@ const Budget = ({ isDarkMode }) => {
 
   useEffect(() => {
     const calculateTotalExpenses = () => {
-      const total = expenses.reduce((acc, curr) => acc + curr.value, 0)
+      const allExpenses = Object.values(expenses).flat()
+
+      const total = allExpenses.reduce((acc, curr) => acc + curr.value, 0)
       setTotalExpenses(total)
     }
     calculateTotalExpenses()
@@ -73,18 +82,20 @@ const Budget = ({ isDarkMode }) => {
 
       if (!querySnapshot.empty) {
         const budgetData = querySnapshot.docs[0].data()
-        
-        const updatedExpenses = budgetData.expenses.map(expense => {
-          if (!expense.category) {
-            return { ...expense, category: 'Moradia' }
-          }
-          return expense
-        })
-
         setSalary(budgetData.salary)
         setApplyDiscount(budgetData.applyDiscount)
         setOtherIncome(budgetData.otherIncome)
-        setExpenses(updatedExpenses)
+
+        if (budgetData.expenses) {
+          setExpenses(budgetData.expenses)
+        } else {
+          setExpenses({
+            Moradia: [],
+            Transporte: [],
+            Educação: [],
+            Lazer: []
+          })
+        }
       } else {
         const previousMonth = dayjs(date).subtract(1, 'month').format('YYYY/MM')
         const qPrevious = query(budgetRef, where('month', '==', previousMonth), where('userId', '==', user.uid), limit(1))
@@ -93,9 +104,24 @@ const Budget = ({ isDarkMode }) => {
         if (!queryPreviousSnapshot.empty) {
           const previousBudgetData = queryPreviousSnapshot.docs[0].data()
           const fixedExpenses = previousBudgetData.expenses.filter((expense) => expense.fixed)
-          setExpenses(fixedExpenses)
+
+          if (fixedExpenses.length > 0) {
+            setExpenses(fixedExpenses)
+          } else {
+            setExpenses({
+              Moradia: [],
+              Transporte: [],
+              Educação: [],
+              Lazer: []
+            })
+          }
         } else {
-          setExpenses([{ id: uuidv4(), name: '', value: 0, fixed: false }])
+          setExpenses({
+            Moradia: [],
+            Transporte: [],
+            Educação: [],
+            Lazer: []
+          })
         }
 
         setSalary(0)
@@ -138,19 +164,46 @@ const Budget = ({ isDarkMode }) => {
     }
   }
 
-  const handleExpenseChange = (index, field, value) => {
-    const newExpenses = [...expenses]
-    newExpenses[index][field] = value
-    setExpenses(newExpenses)
+  const handleExpenseChange = (category, index, field, value) => {
+    if (!category || !expenses[category]) {
+      console.error("Categoria inválida ou não encontrada.")
+      return
+    }
+
+    const updatedCategoryExpenses = [...expenses[category]]
+
+    updatedCategoryExpenses[index] = {
+      ...updatedCategoryExpenses[index],
+      [field]: value
+    }
+
+    setExpenses({
+      ...expenses,
+      [category]: updatedCategoryExpenses
+    })
   }
 
-  const addExpense = () => {
-    setExpenses([...expenses, { id: uuidv4(), name: '', value: 0, fixed: false, category: '' }])
+  const addExpense = (category) => {
+    if (!category) {
+      console.error("Categoria inválida. A despesa deve pertencer a uma categoria.")
+      return
+    }
+
+    setExpenses({
+      ...expenses,
+      [category]: [
+        ...(expenses[category] || []),
+        { id: uuidv4(), name: '', value: 0, fixed: false, category }
+      ]
+    })
   }
 
-  const removeExpense = (index) => {
-    const newExpenses = expenses.filter((_, i) => i !== index)
-    setExpenses(newExpenses)
+  const removeExpense = (category, index) => {
+    const updatedCategoryExpenses = expenses[category].filter((_, i) => i !== index)
+    setExpenses({
+      ...expenses,
+      [category]: updatedCategoryExpenses
+    })
   }
 
   const handleSubmit = async () => {
@@ -173,21 +226,41 @@ const Budget = ({ isDarkMode }) => {
     }
   }
 
-  const generateColor = () => {
+  const generateColor = useCallback(() => {
     const randomColor = () =>
       `#${Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0')}`
-    return expenses.map(() => randomColor())
-  }
+  
+    const updatedColors = { ...colors }
+    let colorUpdated = false
+  
+    allExpenses.forEach((expense) => {
+      if (!updatedColors[expense.id]) {
+        updatedColors[expense.id] = randomColor()
+        colorUpdated = true
+      }
+    })
+  
+    if (colorUpdated) {
+      setColors(updatedColors)
+    }
+  }, [allExpenses, colors])
+  
+  
+  useEffect(() => {
+    generateColor()
+  }, [allExpenses, generateColor])
 
   const data = {
-    labels: expenses.map((exp) => exp.name),
+    labels: allExpenses.map((exp) => exp.name),
     datasets: [
       {
-        data: expenses.map((exp) => exp.value),
-        backgroundColor: generateColor(),
+        data: allExpenses.map((exp) => exp.value),
+        backgroundColor: allExpenses.map((exp) => colors[exp.id]),
       },
     ],
   }
+
+  console.log(expenses)
 
   return (
     <Card className={`budget-card ${isDarkMode ? 'dark-mode' : ''}`}>

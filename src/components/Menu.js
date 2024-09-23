@@ -30,10 +30,17 @@ const AppMenu = () => {
 
   return (
     <div className={`sidebar ${collapsed ? 'collapsed' : ''}`}>
-      <Button type="primary" onClick={toggleCollapsed} className="menu-toggle-button">
+      <Button onClick={toggleCollapsed} className="menu-toggle-button">
         {collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
       </Button>
-      <Menu defaultSelectedKeys={['1']} mode="inline" theme="dark" items={items} inlineCollapsed={collapsed} />
+      <Menu
+        defaultSelectedKeys={['1']}
+        mode="inline"
+        theme="dark"
+        items={items}
+        inlineCollapsed={collapsed}
+        style={{ backgroundColor: 'var(--dark-background)' }}
+      />
     </div>
   )
 }

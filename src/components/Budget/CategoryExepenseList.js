@@ -1,48 +1,52 @@
-import React, { useState } from 'react';
-import { Collapse, Row, Col, Input, InputNumber, Checkbox, Button, Form, message } from 'antd';
-import { PlusOutlined, MinusCircleOutlined, DeleteOutlined } from '@ant-design/icons';
+import React, { useState } from 'react'
+import { Collapse, Row, Col, Input, InputNumber, Checkbox, Button, Form, message } from 'antd'
+import { PlusOutlined, MinusCircleOutlined, DeleteOutlined } from '@ant-design/icons'
 
-const { Panel } = Collapse;
+const { Panel } = Collapse
 
 const initialCategories = {
   Moradia: ['Apartamento', 'Luz', 'Internet'],
   Transporte: ['Combustível', 'Manutenção'],
   Educação: ['Cursos', 'Livros'],
   Lazer: ['Cinema', 'Viagens'],
-};
+}
 
-const CategoryExpenseList = ({ expenses, handleExpenseChange, addExpense, removeExpense }) => {
-  const [categories, setCategories] = useState(initialCategories);
-  const [newCategoryName, setNewCategoryName] = useState('');
+const CategoryExpenseList = ({ expenses, handleExpenseChange, addExpense, removeExpense, setExpenses }) => {
+  const [categories, setCategories] = useState(initialCategories)
+  const [newCategoryName, setNewCategoryName] = useState('')
 
   const getCategoryExpenses = (category) => {
-    return expenses.filter((expense) => expense.category === category);
-  };
+    return expenses[category] || []
+  }  
 
   const calculateCategoryTotal = (category) => {
-    const categoryExpenses = getCategoryExpenses(category);
-    return categoryExpenses.reduce((total, expense) => total + expense.value, 0);
-  };
+    const categoryExpenses = getCategoryExpenses(category)
+    return categoryExpenses.reduce((total, expense) => total + expense.value, 0)
+  }
 
   const handleAddCategory = () => {
     if (!newCategoryName.trim()) {
-      message.error('O nome da categoria não pode estar vazio');
-      return;
+      message.error('O nome da categoria não pode estar vazio')
+      return
     }
     if (categories[newCategoryName]) {
-      message.error('Essa categoria já existe');
-      return;
+      message.error('Essa categoria já existe')
+      return
     }
 
-    setCategories({ ...categories, [newCategoryName]: [] });
-    setNewCategoryName('');
-  };
+    setCategories({ ...categories, [newCategoryName]: [] })
+    setNewCategoryName('')
+  }
 
   const handleRemoveCategory = (category) => {
-    const newCategories = { ...categories };
-    delete newCategories[category];
-    setCategories(newCategories);
-  };
+    const newCategories = { ...categories }
+    delete newCategories[category]
+    setCategories(newCategories)
+
+    const newExpenses = { ...expenses }
+    delete newExpenses[category]
+    removeExpense(newExpenses)
+  }
 
   return (
     <>
@@ -71,7 +75,7 @@ const CategoryExpenseList = ({ expenses, handleExpenseChange, addExpense, remove
                   <Input
                     placeholder="Nome da Conta"
                     value={expense.name}
-                    onChange={(e) => handleExpenseChange(index, 'name', e.target.value)}
+                    onChange={(e) => handleExpenseChange(category, index, 'name', e.target.value)}
                     className="expense-input"
                   />
                 </Col>
@@ -79,8 +83,8 @@ const CategoryExpenseList = ({ expenses, handleExpenseChange, addExpense, remove
                   <InputNumber
                     placeholder="Valor"
                     className="expense-input-number"
-                    value={expense.value}
-                    onChange={(value) => handleExpenseChange(index, 'value', value)}
+                    value={expense.value || 0}
+                    onChange={(value) => handleExpenseChange(category, index, 'value', value)}
                     formatter={(value) => `R$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                     parser={(value) => value.replace(/R\$\s?|(,*)/g, '')}
                   />
@@ -88,7 +92,7 @@ const CategoryExpenseList = ({ expenses, handleExpenseChange, addExpense, remove
                 <Col xs={12} md={4}>
                   <Checkbox
                     checked={expense.fixed}
-                    onChange={(e) => handleExpenseChange(index, 'fixed', e.target.checked)}
+                    onChange={(e) => handleExpenseChange(category, index, 'fixed', e.target.checked)}
                   >
                     Fixo
                   </Checkbox>
@@ -97,7 +101,7 @@ const CategoryExpenseList = ({ expenses, handleExpenseChange, addExpense, remove
                   <Button
                     type="danger"
                     icon={<MinusCircleOutlined />}
-                    onClick={() => removeExpense(index)}
+                    onClick={() => removeExpense(category, index)}
                     className="expense-button"
                   />
                 </Col>
@@ -131,7 +135,7 @@ const CategoryExpenseList = ({ expenses, handleExpenseChange, addExpense, remove
         </Form.Item>
       </Form>
     </>
-  );
-};
+  )
+}
 
-export default CategoryExpenseList;
+export default CategoryExpenseList
