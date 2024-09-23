@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react'
-import { Card, Form, Typography, Row, Col, Button, message } from 'antd'
+import { Card, Form, Typography, Row, Col, Button, Select, message } from 'antd'
 import { v4 as uuidv4 } from 'uuid'
 import { db } from '../services/firebase'
 import { collection, addDoc, getDocs, query, where, limit, doc, deleteDoc } from 'firebase/firestore'
@@ -15,6 +15,7 @@ import CategoryExpenseList from './Budget/CategoryExepenseList'
 ChartJS.register(ArcElement, Tooltip, Legend)
 
 const { Title } = Typography
+const { Option } = Select
 
 const Budget = ({ isDarkMode }) => {
   const [salary, setSalary] = useState(0)
@@ -30,6 +31,7 @@ const Budget = ({ isDarkMode }) => {
   const [month, setMonth] = useState(null)
   const [totalIncome, setTotalIncome] = useState(0)
   const [totalExpenses, setTotalExpenses] = useState(0)
+  const [viewMode, setViewMode] = useState('all')
   const [remainingBalance, setRemainingBalance] = useState(0)
   const allExpenses = Object.values(expenses).flat()
 
@@ -229,26 +231,55 @@ const Budget = ({ isDarkMode }) => {
   const generateColor = useCallback(() => {
     const randomColor = () =>
       `#${Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0')}`
-  
+
     const updatedColors = { ...colors }
     let colorUpdated = false
-  
+
     allExpenses.forEach((expense) => {
       if (!updatedColors[expense.id]) {
         updatedColors[expense.id] = randomColor()
         colorUpdated = true
       }
     })
-  
+
     if (colorUpdated) {
       setColors(updatedColors)
     }
   }, [allExpenses, colors])
-  
-  
+
+
   useEffect(() => {
     generateColor()
   }, [allExpenses, generateColor])
+
+  const groupByCategory = () => {
+    const categories = Object.keys(expenses)
+    const dataByCategory = categories.map((category) => {
+      const categoryTotal = expenses[category].reduce((acc, expense) => acc + expense.value, 0)
+      return { name: category, value: categoryTotal }
+    })
+    return dataByCategory
+  }
+
+  const pieData = viewMode === 'all'
+    ? {
+      labels: allExpenses.map((exp) => exp.name),
+      datasets: [
+        {
+          data: allExpenses.map((exp) => exp.value),
+          backgroundColor: allExpenses.map((exp) => colors[exp.id]),
+        },
+      ],
+    }
+    : {
+      labels: groupByCategory().map((cat) => cat.name),
+      datasets: [
+        {
+          data: groupByCategory().map((cat) => cat.value),
+          backgroundColor: groupByCategory().map(() => `#${Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0')}`),
+        },
+      ],
+    }
 
   const data = {
     labels: allExpenses.map((exp) => exp.name),
@@ -273,6 +304,13 @@ const Budget = ({ isDarkMode }) => {
           setOtherIncome={setOtherIncome}
           handleMonthChange={handleMonthChange}
         />
+
+        <Form.Item label="Visualização do Gráfico">
+          <Select defaultValue="all" onChange={(value) => setViewMode(value)}>
+            <Option value="all">Todas as Contas</Option>
+            <Option value="categories">Por Categoria</Option>
+          </Select>
+        </Form.Item>
         <Row gutter={32}>
           <Col xs={24} md={12}>
             <div className="expense-list">
@@ -286,7 +324,7 @@ const Budget = ({ isDarkMode }) => {
           </Col>
           <Col xs={24} md={12}>
             <div>
-              <Pie data={data} />
+              <Pie data={pieData} />
             </div>
           </Col>
         </Row>
