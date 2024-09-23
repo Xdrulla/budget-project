@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Collapse, Row, Col, Input, InputNumber, Checkbox, Button, Form, message } from 'antd'
 import { PlusOutlined, MinusCircleOutlined, DeleteOutlined } from '@ant-design/icons'
 
@@ -14,6 +14,25 @@ const initialCategories = {
 const CategoryExpenseList = ({ expenses, handleExpenseChange, addExpense, removeExpense, setExpenses }) => {
   const [categories, setCategories] = useState(initialCategories)
   const [newCategoryName, setNewCategoryName] = useState('')
+
+  useEffect(() => {
+    const dynamicCategories = Object.keys(expenses).filter(
+      (category) => !Object.keys(initialCategories).includes(category)
+    )
+    if (dynamicCategories.length > 0) {
+      const updatedCategories = { ...categories }
+      let changed = false
+      dynamicCategories.forEach((category) => {
+        if (!updatedCategories[category]) {
+          updatedCategories[category] = []
+          changed = true
+        }
+      })
+      if (changed) {
+        setCategories(updatedCategories)
+      }
+    }
+  }, [expenses, categories])
 
   const getCategoryExpenses = (category) => {
     return expenses[category] || []

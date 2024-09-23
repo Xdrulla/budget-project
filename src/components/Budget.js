@@ -260,8 +260,6 @@ const Budget = ({ isDarkMode }) => {
     ],
   }
 
-  console.log(expenses)
-
   return (
     <Card className={`budget-card ${isDarkMode ? 'dark-mode' : ''}`}>
       <Title level={2} className="budget-title">Orçamento Mensal</Title>
