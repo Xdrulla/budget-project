@@ -281,16 +281,6 @@ const Budget = ({ isDarkMode }) => {
       ],
     }
 
-  const data = {
-    labels: allExpenses.map((exp) => exp.name),
-    datasets: [
-      {
-        data: allExpenses.map((exp) => exp.value),
-        backgroundColor: allExpenses.map((exp) => colors[exp.id]),
-      },
-    ],
-  }
-
   return (
     <Card className={`budget-card ${isDarkMode ? 'dark-mode' : ''}`}>
       <Title level={2} className="budget-title">Orçamento Mensal</Title>
