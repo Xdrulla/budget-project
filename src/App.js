@@ -58,7 +58,10 @@ const App = () => {
                   shape="circle"
                   icon={<BulbOutlined />}
                   onClick={toggleTheme}
-                  style={{ marginLeft: '10px' }}
+                  style={{
+                    marginLeft: '10px',
+                    zIndex: 1000
+                  }}
                 />
               </div>
               <Routes>
