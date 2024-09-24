@@ -36,7 +36,7 @@ const CategoryExpenseList = ({ expenses, handleExpenseChange, addExpense, remove
 
   const getCategoryExpenses = (category) => {
     return expenses[category] || []
-  }  
+  }
 
   const calculateCategoryTotal = (category) => {
     const categoryExpenses = getCategoryExpenses(category)
@@ -64,7 +64,7 @@ const CategoryExpenseList = ({ expenses, handleExpenseChange, addExpense, remove
 
     const newExpenses = { ...expenses }
     delete newExpenses[category]
-    removeExpense(newExpenses)
+    setExpenses(newExpenses)
   }
 
   return (

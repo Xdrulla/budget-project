@@ -105,9 +105,14 @@ const Budget = ({ isDarkMode }) => {
 
         if (!queryPreviousSnapshot.empty) {
           const previousBudgetData = queryPreviousSnapshot.docs[0].data()
-          const fixedExpenses = previousBudgetData.expenses.filter((expense) => expense.fixed)
-
-          if (fixedExpenses.length > 0) {
+          const fixedExpenses = {}
+          if (previousBudgetData.expenses) {
+            Object.keys(previousBudgetData.expenses).forEach((category) => {
+              const categoryExpenses = previousBudgetData.expenses[category]
+              fixedExpenses[category] = categoryExpenses.filter((expense) => expense.fixed)
+            })
+          }
+          if (Object.keys(fixedExpenses).length > 0) {
             setExpenses(fixedExpenses)
           } else {
             setExpenses({
@@ -309,6 +314,7 @@ const Budget = ({ isDarkMode }) => {
                 handleExpenseChange={handleExpenseChange}
                 addExpense={addExpense}
                 removeExpense={removeExpense}
+                setExpenses={setExpenses}
               />
             </div>
           </Col>
