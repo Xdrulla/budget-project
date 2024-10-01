@@ -4,7 +4,7 @@ import { Card, Form, Typography, Row, Col, Button, Select, message } from 'antd'
 import { v4 as uuidv4 } from 'uuid'
 
 import { db } from '../services/firebase'
-import { collection, addDoc, getDocs, query, where, limit, doc, deleteDoc } from 'firebase/firestore'
+import { collection, addDoc, getDocs, query, where, limit, doc, deleteDoc, setDoc } from 'firebase/firestore'
 import { getAuth } from 'firebase/auth'
 
 import dayjs from 'dayjs'
@@ -39,7 +39,7 @@ const Budget = ({ isDarkMode }) => {
   const [month, setMonth] = useState(null)
   const [totalIncome, setTotalIncome] = useState(0)
   const [totalExpenses, setTotalExpenses] = useState(0)
-  const [viewMode, setViewMode] = useState('all')
+  const [viewMode, setViewMode] = useState('categories')
   const [remainingBalance, setRemainingBalance] = useState(0)
   const allExpenses = Object.values(expenses).flat()
 
@@ -53,7 +53,7 @@ const Budget = ({ isDarkMode }) => {
       setTotalIncome(salaryAfterDiscount + otherIncome)
     }
     calculateTotalIncome()
-  }, [salary, otherIncome, applyDiscount, discountPercentage])  
+  }, [salary, otherIncome, applyDiscount, discountPercentage])
 
   useEffect(() => {
     const calculateTotalExpenses = () => {
@@ -226,6 +226,7 @@ const Budget = ({ isDarkMode }) => {
   const handleSubmit = async () => {
     if (!month) {
       message.error('Por favor, selecione o mês.')
+      return
     }
 
     if (!salary || salary <= 0) {
@@ -246,10 +247,21 @@ const Budget = ({ isDarkMode }) => {
     }
 
     try {
-      await addDoc(collection(db, 'budgets'), budgetData)
+      const budgetRef = collection(db, 'budgets')
+      const q = query(budgetRef, where('month', '==', month), where('userId', '==', user.uid), limit(1))
+      const querySnapshot = await getDocs(q)
+
+      if (!querySnapshot.empty) {
+        const docId = querySnapshot.docs[0].id
+        await setDoc(doc(db, 'budgets', docId), budgetData)
+      } else {
+        await addDoc(budgetRef, budgetData)
+      }
+
       ReactSwal.fire(saveSucessful(t))
     } catch (err) {
       console.error('Erro ao salvar orçamento:', err)
+      message.error('Erro ao salvar o orçamento!')
     }
   }
 
@@ -280,7 +292,8 @@ const Budget = ({ isDarkMode }) => {
   const groupByCategory = () => {
     const categories = Object.keys(expenses)
     const dataByCategory = categories.map((category) => {
-      const categoryTotal = expenses[category].reduce((acc, expense) => acc + expense.value, 0)
+      const categoryExpenses = Array.isArray(expenses[category]) ? expenses[category] : []
+      const categoryTotal = categoryExpenses.reduce((acc, expense) => acc + expense.value, 0)
       return { name: category, value: categoryTotal }
     })
     return dataByCategory
@@ -323,7 +336,7 @@ const Budget = ({ isDarkMode }) => {
         />
 
         <Form.Item label="Visualização do Gráfico">
-          <Select defaultValue="all" onChange={(value) => setViewMode(value)}>
+          <Select defaultValue="categories" onChange={(value) => setViewMode(value)}>
             <Option value="all">Todas as Contas</Option>
             <Option value="categories">Por Categoria</Option>
           </Select>
