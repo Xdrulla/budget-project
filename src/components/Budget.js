@@ -1,12 +1,18 @@
 import React, { useState, useEffect, useCallback } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Card, Form, Typography, Row, Col, Button, Select, message } from 'antd'
 import { v4 as uuidv4 } from 'uuid'
+
 import { db } from '../services/firebase'
 import { collection, addDoc, getDocs, query, where, limit, doc, deleteDoc } from 'firebase/firestore'
 import { getAuth } from 'firebase/auth'
+
 import dayjs from 'dayjs'
 import { Pie } from 'react-chartjs-2'
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js'
+
+import ReactSwal from './common/ReactSwal'
+import { saveSucessful, deleteBudget } from './content/alert'
 
 import BudgetForm from './Budget/BudgetForm'
 import TotalInfo from './Budget/TotalInfo'
@@ -18,9 +24,11 @@ const { Title } = Typography
 const { Option } = Select
 
 const Budget = ({ isDarkMode }) => {
+  const { t } = useTranslation()
   const [salary, setSalary] = useState(0)
   const [otherIncome, setOtherIncome] = useState(0)
   const [applyDiscount, setApplyDiscount] = useState(false)
+  const [discountPercentage, setDiscountPercentage] = useState(9)
   const [colors, setColors] = useState({})
   const [expenses, setExpenses] = useState({
     Moradia: [],
@@ -40,11 +48,12 @@ const Budget = ({ isDarkMode }) => {
 
   useEffect(() => {
     const calculateTotalIncome = () => {
-      const salaryAfterDiscount = applyDiscount ? salary * 0.91 : salary
+      const discountRate = applyDiscount ? (1 - discountPercentage / 100) : 1
+      const salaryAfterDiscount = salary * discountRate
       setTotalIncome(salaryAfterDiscount + otherIncome)
     }
     calculateTotalIncome()
-  }, [salary, otherIncome, applyDiscount])
+  }, [salary, otherIncome, applyDiscount, discountPercentage])  
 
   useEffect(() => {
     const calculateTotalExpenses = () => {
@@ -156,6 +165,7 @@ const Budget = ({ isDarkMode }) => {
       const docId = querySnapshot.docs[0].id
       try {
         await deleteDoc(doc(db, 'budgets', docId))
+        ReactSwal.fire(deleteBudget(t))
         message.success('Orçamento deletado com sucesso!')
         setSalary(0)
         setApplyDiscount(false)
@@ -214,6 +224,15 @@ const Budget = ({ isDarkMode }) => {
   }
 
   const handleSubmit = async () => {
+    if (!month) {
+      message.error('Por favor, selecione o mês.')
+    }
+
+    if (!salary || salary <= 0) {
+      message.error('Por favor, insira um valor válido para o salário.')
+      return
+    }
+
     const budgetData = {
       userId: user.uid,
       month,
@@ -228,6 +247,7 @@ const Budget = ({ isDarkMode }) => {
 
     try {
       await addDoc(collection(db, 'budgets'), budgetData)
+      ReactSwal.fire(saveSucessful(t))
     } catch (err) {
       console.error('Erro ao salvar orçamento:', err)
     }
@@ -294,10 +314,12 @@ const Budget = ({ isDarkMode }) => {
           salary={salary}
           setSalary={setSalary}
           applyDiscount={applyDiscount}
+          discountPercentage={discountPercentage}
           setApplyDiscount={setApplyDiscount}
           otherIncome={otherIncome}
           setOtherIncome={setOtherIncome}
           handleMonthChange={handleMonthChange}
+          setDiscountPercentage={setDiscountPercentage}
         />
 
         <Form.Item label="Visualização do Gráfico">

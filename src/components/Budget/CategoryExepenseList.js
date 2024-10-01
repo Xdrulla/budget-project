@@ -35,7 +35,7 @@ const CategoryExpenseList = ({ expenses, handleExpenseChange, addExpense, remove
   }, [expenses, categories])
 
   const getCategoryExpenses = (category) => {
-    return expenses[category] || []
+    return Array.isArray(expenses[category]) ? expenses[category] : []
   }
 
   const calculateCategoryTotal = (category) => {

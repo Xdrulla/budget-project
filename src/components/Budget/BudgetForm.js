@@ -1,7 +1,19 @@
 import React from 'react';
-import { Form, InputNumber, Switch, DatePicker, Row, Col } from 'antd';
+import { Form, InputNumber, Switch, DatePicker, Row, Col, Select } from 'antd'
 
-const BudgetForm = ({ salary, setSalary, applyDiscount, setApplyDiscount, otherIncome, setOtherIncome, handleMonthChange }) => {
+const { Option } = Select
+
+const BudgetForm = ({
+  salary,
+  setSalary,
+  applyDiscount,
+  setApplyDiscount,
+  discountPercentage,
+  setDiscountPercentage,
+  otherIncome,
+  setOtherIncome,
+  handleMonthChange
+}) => {
   return (
     <>
       <Row gutter={16}>
@@ -17,9 +29,29 @@ const BudgetForm = ({ salary, setSalary, applyDiscount, setApplyDiscount, otherI
           </Form.Item>
         </Col>
         <Col xs={24} md={12}>
-          <Form.Item label="Descontar 9% do Salário?">
-            <Switch checked={applyDiscount} onChange={setApplyDiscount} />
-          </Form.Item>
+          <Row gutter={16}>
+            <Col xs={12}>
+              <Form.Item label="Aplicar Desconto?">
+                <Switch checked={applyDiscount} onChange={setApplyDiscount} />
+              </Form.Item>
+            </Col>
+            {applyDiscount && (
+              <Col xs={12}>
+                <Form.Item label="Porcentagem de Desconto">
+                  <Select
+                    value={discountPercentage}
+                    onChange={setDiscountPercentage}
+                    style={{ width: '100%' }}
+                  >
+                    <Option value={8}>8%</Option>
+                    <Option value={9}>9%</Option>
+                    <Option value={12}>12%</Option>
+                    <Option value={14}>14%</Option>
+                  </Select>
+                </Form.Item>
+              </Col>
+            )}
+          </Row>
         </Col>
       </Row>
       <Row gutter={16}>
