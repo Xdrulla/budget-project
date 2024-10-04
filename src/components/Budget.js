@@ -59,7 +59,7 @@ const Budget = ({ isDarkMode }) => {
     const calculateTotalExpenses = () => {
       const allExpenses = Object.values(expenses).flat()
 
-      const total = allExpenses.reduce((acc, curr) => acc + curr.value, 0)
+      const total = allExpenses.reduce((acc, curr) => acc + (curr.paid ? 0 : curr.value), 0)
       setTotalExpenses(total)
     }
     calculateTotalExpenses()

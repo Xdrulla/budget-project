@@ -40,7 +40,7 @@ const CategoryExpenseList = ({ expenses, handleExpenseChange, addExpense, remove
 
   const calculateCategoryTotal = (category) => {
     const categoryExpenses = getCategoryExpenses(category)
-    return categoryExpenses.reduce((total, expense) => total + expense.value, 0)
+    return categoryExpenses.reduce((total, expense) => total + (expense.paid ? 0 : expense.value), 0)
   }
 
   const handleAddCategory = () => {
@@ -114,6 +114,14 @@ const CategoryExpenseList = ({ expenses, handleExpenseChange, addExpense, remove
                     onChange={(e) => handleExpenseChange(category, index, 'fixed', e.target.checked)}
                   >
                     Fixo
+                  </Checkbox>
+                </Col>
+                <Col xs={12} md={4}>
+                  <Checkbox
+                    checked={expense.paid}
+                    onChange={(e) => handleExpenseChange(category, index, 'paid', e.target.checked)}
+                  >
+                    Paga
                   </Checkbox>
                 </Col>
                 <Col xs={12} md={4}>
