@@ -1,7 +1,7 @@
 import React from 'react';
 import { Form, InputNumber } from 'antd';
 
-const TotalInfo = ({ totalIncome, totalExpenses, remainingBalance }) => {
+const TotalInfo = ({ totalIncome, totalExpenses, totalPaidExpenses, remainingBalance }) => {
   return (
     <>
       <Form.Item label="Total de Renda">
@@ -16,6 +16,14 @@ const TotalInfo = ({ totalIncome, totalExpenses, remainingBalance }) => {
         <InputNumber
           style={{ width: '100%', borderRadius: '8px' }}
           value={totalExpenses}
+          readOnly
+          formatter={(value) => `R$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+        />
+      </Form.Item>
+      <Form.Item label="Contas Pagas">
+        <InputNumber
+          style={{ width: '100%', borderRadius: '8px' }}
+          value={totalPaidExpenses}
           readOnly
           formatter={(value) => `R$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
         />

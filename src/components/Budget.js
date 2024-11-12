@@ -39,6 +39,7 @@ const Budget = ({ isDarkMode }) => {
   const [month, setMonth] = useState(null)
   const [totalIncome, setTotalIncome] = useState(0)
   const [totalExpenses, setTotalExpenses] = useState(0)
+  const [totalPaidExpenses, setTotalPaidExpenses] = useState(0)
   const [viewMode, setViewMode] = useState('categories')
   const [remainingBalance, setRemainingBalance] = useState(0)
   const allExpenses = Object.values(expenses).flat()
@@ -47,13 +48,18 @@ const Budget = ({ isDarkMode }) => {
   const user = auth.currentUser
 
   useEffect(() => {
-    const calculateTotalIncome = () => {
-      const discountRate = applyDiscount ? (1 - discountPercentage / 100) : 1
-      const salaryAfterDiscount = salary * discountRate
-      setTotalIncome(salaryAfterDiscount + otherIncome)
-    }
-    calculateTotalIncome()
-  }, [salary, otherIncome, applyDiscount, discountPercentage])
+    const calculateTotalExpenses = () => {
+      const allExpenses = Object.values(expenses).flat();
+
+      const total = allExpenses.reduce((acc, curr) => acc + (curr.paid ? 0 : curr.value), 0);
+      const paidTotal = allExpenses.reduce((acc, curr) => acc + (curr.paid ? curr.value : 0), 0);
+
+      setTotalExpenses(total);
+      setTotalPaidExpenses(paidTotal);
+    };
+    calculateTotalExpenses();
+  }, [expenses]);
+
 
   useEffect(() => {
     const calculateTotalExpenses = () => {
@@ -66,11 +72,17 @@ const Budget = ({ isDarkMode }) => {
   }, [expenses])
 
   useEffect(() => {
-    const calculateRemainingBalance = () => {
-      setRemainingBalance(totalIncome - totalExpenses)
-    }
-    calculateRemainingBalance()
-  }, [totalIncome, totalExpenses])
+    const calculateTotalIncome = () => {
+      const discountRate = applyDiscount ? (1 - discountPercentage / 100) : 1;
+      const salaryAfterDiscount = salary * discountRate;
+      setTotalIncome(salaryAfterDiscount + otherIncome);
+    };
+    calculateTotalIncome()
+  }, [salary, otherIncome, applyDiscount, discountPercentage])
+
+  useEffect(() => {
+    setRemainingBalance(totalIncome - totalPaidExpenses);
+  }, [totalIncome, totalPaidExpenses]);
 
   const handleMonthChange = async (date) => {
     if (!user) {
@@ -360,7 +372,12 @@ const Budget = ({ isDarkMode }) => {
           </Col>
         </Row>
 
-        <TotalInfo totalIncome={totalIncome} totalExpenses={totalExpenses} remainingBalance={remainingBalance} />
+        <TotalInfo
+          totalIncome={totalIncome}
+          totalExpenses={totalExpenses}
+          totalPaidExpenses={totalPaidExpenses}
+          remainingBalance={remainingBalance}
+        />
 
         <Row gutter={16} className="budget-button-container">
           <Button type="primary" className="budget-button" onClick={handleSubmit}>
