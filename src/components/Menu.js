@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { BarChartOutlined, PieChartOutlined, LineChartOutlined, MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons'
+import { PieChartOutlined, LineChartOutlined, MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons'
 import { Menu, Button } from 'antd'
 import { Link } from 'react-router-dom'
 
@@ -13,11 +13,6 @@ const items = [
     key: '2',
     icon: <LineChartOutlined />,
     label: <Link to="/media-mensal">Média Mensal</Link>,
-  },
-  {
-    key: '3',
-    icon: <BarChartOutlined />,
-    label: <Link to="/options3">Options 3</Link>,
   },
 ]
 
