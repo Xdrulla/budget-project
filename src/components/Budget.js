@@ -365,9 +365,19 @@ const Budget = ({ isDarkMode }) => {
               />
             </div>
           </Col>
-          <Col xs={24} md={12}>
+          <Col xs={24} md={12} style={{ marginTop: 20 }}>
             <div>
-              <Pie data={pieData} />
+              <Pie
+                data={pieData}
+                options={{
+                  responsive: true,
+                  maintainAspectRatio: false,
+                  plugins: {
+                    legend: { position: 'bottom' }
+                  }
+                }}
+                height={250}
+              />
             </div>
           </Col>
         </Row>

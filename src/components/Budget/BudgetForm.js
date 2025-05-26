@@ -16,62 +16,65 @@ const BudgetForm = ({
 }) => {
   return (
     <>
-      <Row gutter={16}>
-        <Col xs={24} md={12}>
-          <Form.Item label="Salário">
-            <InputNumber
-              style={{ width: '100%', borderRadius: '8px' }}
-              value={salary}
-              onChange={setSalary}
-              formatter={(value) => `R$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-              parser={(value) => value.replace(/R\$\s?|(,*)/g, '')}
-            />
-          </Form.Item>
-        </Col>
-        <Col xs={24} md={12}>
-          <Row gutter={16}>
-            <Col xs={12}>
-              <Form.Item label="Aplicar Desconto?">
-                <Switch checked={applyDiscount} onChange={setApplyDiscount} />
-              </Form.Item>
-            </Col>
-            {applyDiscount && (
+      <div className="budget-form">
+        <Row gutter={16}>
+          <Col xs={24} md={12}>
+            <Form.Item label="Salário">
+              <InputNumber
+                style={{ width: '100%', borderRadius: '8px' }}
+                value={salary}
+                onChange={setSalary}
+                formatter={(value) => `R$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                parser={(value) => value.replace(/R\$\s?|(,*)/g, '')}
+              />
+            </Form.Item>
+          </Col>
+          <Col xs={24} md={12}>
+            <Row gutter={16}>
               <Col xs={12}>
-                <Form.Item label="Porcentagem de Desconto">
-                  <Select
-                    value={discountPercentage}
-                    onChange={setDiscountPercentage}
-                    style={{ width: '100%' }}
-                  >
-                    <Option value={8}>8%</Option>
-                    <Option value={9}>9%</Option>
-                    <Option value={12}>12%</Option>
-                    <Option value={14}>14%</Option>
-                  </Select>
+                <Form.Item label="Aplicar Desconto?">
+                  <Switch checked={applyDiscount} onChange={setApplyDiscount} />
                 </Form.Item>
               </Col>
-            )}
-          </Row>
-        </Col>
-      </Row>
-      <Row gutter={16}>
-        <Col xs={24} md={12}>
-          <Form.Item label="Outras Rendas">
-            <InputNumber
-              style={{ width: '100%', borderRadius: '8px' }}
-              value={otherIncome}
-              onChange={setOtherIncome}
-              formatter={(value) => `R$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-              parser={(value) => value.replace(/R\$\s?|(,*)/g, '')}
-            />
-          </Form.Item>
-        </Col>
-        <Col xs={24} md={12}>
-          <Form.Item label="Mês do Orçamento">
-            <DatePicker picker="month" onChange={handleMonthChange} style={{ width: '100%', borderRadius: '8px' }} format="YYYY-MM" />
-          </Form.Item>
-        </Col>
-      </Row>
+              {applyDiscount && (
+                <Col xs={12}>
+                  <Form.Item label="Porcentagem de Desconto">
+                    <Select
+                      value={discountPercentage}
+                      onChange={setDiscountPercentage}
+                      style={{ width: '100%' }}
+                    >
+                      <Option value={8}>8%</Option>
+                      <Option value={9}>9%</Option>
+                      <Option value={12}>12%</Option>
+                      <Option value={14}>14%</Option>
+                    </Select>
+                  </Form.Item>
+                </Col>
+              )}
+            </Row>
+          </Col>
+        </Row>
+
+        <Row gutter={16}>
+          <Col xs={24} md={12}>
+            <Form.Item label="Outras Rendas">
+              <InputNumber
+                style={{ width: '100%', borderRadius: '8px' }}
+                value={otherIncome}
+                onChange={setOtherIncome}
+                formatter={(value) => `R$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                parser={(value) => value.replace(/R\$\s?|(,*)/g, '')}
+              />
+            </Form.Item>
+          </Col>
+          <Col xs={24} md={12}>
+            <Form.Item label="Mês do Orçamento">
+              <DatePicker picker="month" onChange={handleMonthChange} style={{ width: '100%', borderRadius: '8px' }} format="YYYY-MM" />
+            </Form.Item>
+          </Col>
+        </Row>
+      </div>
     </>
   );
 };

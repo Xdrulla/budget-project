@@ -3,9 +3,10 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   width: 100%;
   max-width: 800px;
+  padding: 24px;
 
   &-head-title,
-  .ant-form-item-label > label {
+  .ant-form-item-label>label {
     color: @dark-background !important;
   }
 
@@ -24,6 +25,7 @@
   .ant-btn-primary {
     background-color: @primary-color !important;
     border-color: @primary-color !important;
+    width: auto;
   }
 
   .ant-btn-danger {
@@ -32,33 +34,43 @@
   }
 }
 
-.dark-mode .ant-card {
-  background-color: @secondary-color !important;
-  color: #fff;
-}
+.dark-mode {
+  .ant-card {
+    background-color: @secondary-color !important;
+    color: #fff;
 
-.dark-mode .ant-btn-primary {
-  background-color: @primary-color !important;
-  border-color: @primary-color !important;
-}
+    .ant-form-item-label>label,
+    .ant-input input,
+    .ant-picker input {
+      color: #fff !important;
+    }
+  }
 
-.dark-mode .ant-btn-danger {
-  background-color: #ff4d4f !important;
-  border-color: #ff4d4f !important;
-}
+  .ant-btn-primary {
+    background-color: @primary-color !important;
+    border-color: @primary-color !important;
+  }
 
-.dark-mode .ant-checkbox-wrapper {
-  color: #fff !important;
+  .ant-btn-danger {
+    background-color: #ff4d4f !important;
+    border-color: #ff4d4f !important;
+  }
+
+  .ant-checkbox-wrapper {
+    color: #fff !important;
+  }
 }
 
 /* Media Queries */
 @media (max-width: 768px) {
-  .App-header {
+
+  .App-header,
+  .header {
     padding: 10px;
   }
 
   .ant-card {
-    padding: 10px;
+    padding: 16px;
   }
 
   .login-box {
@@ -69,12 +81,9 @@
     width: 100%;
     margin-left: 0;
   }
-}
 
-@media (max-width: 576px) {
   .sidebar {
     width: 100%;
-    height: auto;
     position: relative;
     padding: 10px 0;
   }
@@ -84,65 +93,44 @@
     padding: 10px;
   }
 
-  .header {
-    padding: 10px;
-  }
-
-  .ant-card {
-    padding: 10px;
-    width: 100%;
-    box-sizing: border-box;
-  }
-
-  .login-box {
-    padding: 10px;
-  }
-
-  .user-box input {
-    font-size: 14px;
-  }
-
+  .user-box input,
   form .submit-button {
     font-size: 14px;
   }
+}
 
-  .ant-btn-primary {
-    width: 100%;
-    margin-left: 0;
+@media (max-width: 420px) {
+  .ant-card {
+    padding: 12px;
+  }
+
+  .login-box,
+  .header,
+  .content,
+  .sidebar {
+    padding: 10px;
+  }
+
+  .user-box input,
+  form .submit-button {
+    font-size: 13px;
   }
 }
 
 @media (max-width: 360px) {
-  .sidebar {
-    padding: 5px 0;
-  }
-
-  .content {
-    padding: 5px;
-  }
-
-  .header {
-    padding: 5px;
-  }
-
   .ant-card {
+    padding: 8px;
+  }
+
+  .login-box,
+  .header,
+  .content,
+  .sidebar {
     padding: 5px;
   }
 
-  .login-box {
-    padding: 5px;
-  }
-
-  .user-box input {
-    font-size: 12px;
-  }
-
+  .user-box input,
   form .submit-button {
     font-size: 12px;
-  }
-
-  .ant-btn-primary {
-    width: 100%;
-    margin-left: 0;
   }
 }

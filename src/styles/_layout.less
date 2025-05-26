@@ -15,6 +15,7 @@ html.dark-mode {
 
 .App {
   display: flex;
+  flex-direction: row;
   min-height: 100vh;
 }
 
@@ -26,10 +27,14 @@ html.dark-mode {
   top: 0;
   left: 0;
   bottom: 0;
-  padding-top: 200px;
-  padding-bottom: 100%;
-  transition: width 0.3s;
+  padding: 100px 10px 100px;
   overflow: hidden;
+  transition: width 0.3s ease;
+
+  &.collapsed {
+    width: 80px;
+    padding: 100px 0;
+  }
 }
 
 .sidebar.collapsed {
@@ -50,18 +55,18 @@ html.dark-mode {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   padding: 20px;
   color: #000;
   margin-left: var(--sidebar-width);
-  transition: margin-left 0.3s;
+  transition: margin-left 0.3s ease;
 
   &.dark-mode {
     color: #fff;
   }
 }
 
-.sidebar.collapsed + .content {
+.sidebar.collapsed+.content {
   margin-left: 80px;
 }
 
@@ -74,6 +79,8 @@ html.dark-mode {
   position: fixed;
   top: 0;
   right: 0;
+  background-color: transparent;
+  z-index: 1000;
 }
 
 .user-profile {
@@ -82,13 +89,13 @@ html.dark-mode {
   gap: 10px;
   cursor: pointer;
   margin-top: 10px;
-}
 
-.user-profile .ant-avatar {
-  width: 40px;
-  height: 40px;
-  line-height: 40px;
-  font-size: 24px;
+  .ant-avatar {
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    font-size: 24px;
+  }
 }
 
 .ant-checkbox-wrapper {
@@ -103,16 +110,12 @@ html.dark-mode {
 
 /* Media Queries */
 @media (max-width: 768px) {
-  .App-header {
-    padding: 10px;
+  .header {
+    padding: 12px;
   }
 
-  .ant-card {
-    padding: 10px;
-  }
-
-  .login-box {
-    padding: 20px;
+  .content {
+    padding: 16px;
   }
 }
 
@@ -121,66 +124,37 @@ html.dark-mode {
     width: 100%;
     height: auto;
     position: relative;
-    padding: 10px 0;
+    padding: 10px;
   }
 
   .sidebar.collapsed {
-    width: 80px;
+    width: 100%;
   }
 
   .content {
     margin-left: 0;
-    padding: 10px;
+    padding: 12px;
   }
 
   .header {
     padding: 10px;
   }
 
-  .ant-card {
-    padding: 10px;
-    width: 100%;
-    box-sizing: border-box;
-  }
-
-  .login-box {
-    padding: 10px;
-  }
-
-  .user-box input {
-    font-size: 14px;
-  }
-
+  .user-box input,
   form .submit-button {
     font-size: 14px;
   }
 }
 
 @media (max-width: 360px) {
-  .sidebar {
-    padding: 5px 0;
-  }
 
-  .content {
-    padding: 5px;
-  }
-
+  .sidebar,
+  .content,
   .header {
-    padding: 5px;
+    padding: 6px;
   }
 
-  .ant-card {
-    padding: 5px;
-  }
-
-  .login-box {
-    padding: 5px;
-  }
-
-  .user-box input {
-    font-size: 12px;
-  }
-
+  .user-box input,
   form .submit-button {
     font-size: 12px;
   }
