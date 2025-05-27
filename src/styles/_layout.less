@@ -19,6 +19,7 @@ html.dark-mode {
   min-height: 100vh;
 }
 
+/* ===== Sidebar ===== */
 .sidebar {
   width: var(--sidebar-width);
   background-color: @secondary-color;
@@ -27,7 +28,7 @@ html.dark-mode {
   top: 0;
   left: 0;
   bottom: 0;
-  padding: 100px 10px 100px;
+  padding: 100px 10px;
   overflow: hidden;
   transition: width 0.3s ease;
 
@@ -37,12 +38,18 @@ html.dark-mode {
   }
 }
 
-.sidebar.collapsed {
-  width: 80px;
-  padding-top: 200px;
-  padding-bottom: 100%;
+/* ===== Sidebar colapsada + conteúdo ===== */
+.sidebar.collapsed+.content {
+  margin-left: 80px;
 }
 
+@media (max-width: 768px) {
+  .sidebar.collapsed+.content {
+    margin-left: 0 !important;
+  }
+}
+
+/* ===== Botão de menu ===== */
 .menu-toggle-button {
   position: absolute;
   top: 10px;
@@ -50,6 +57,7 @@ html.dark-mode {
   margin: 16px;
 }
 
+/* ===== Conteúdo principal ===== */
 .content {
   flex: 1;
   display: flex;
@@ -57,19 +65,19 @@ html.dark-mode {
   align-items: center;
   justify-content: flex-start;
   padding: 20px;
-  color: #000;
   margin-left: var(--sidebar-width);
   transition: margin-left 0.3s ease;
-
-  &.dark-mode {
-    color: #fff;
-  }
 }
 
-.sidebar.collapsed+.content {
-  margin-left: 80px;
+html.light-mode .content {
+  color: #000;
 }
 
+html.dark-mode .content {
+  color: #fff;
+}
+
+/* ===== Cabeçalho fixo ===== */
 .header {
   width: 100%;
   display: flex;
@@ -83,6 +91,7 @@ html.dark-mode {
   z-index: 1000;
 }
 
+/* ===== Perfil do usuário ===== */
 .user-profile {
   display: flex;
   align-items: center;
@@ -98,6 +107,7 @@ html.dark-mode {
   }
 }
 
+/* ===== Checkbox modo claro/escuro ===== */
 .ant-checkbox-wrapper {
   &.light-mode {
     color: #000;
@@ -108,7 +118,7 @@ html.dark-mode {
   }
 }
 
-/* Media Queries */
+/* ===== Responsividade ===== */
 @media (max-width: 768px) {
   .header {
     padding: 12px;
@@ -116,6 +126,7 @@ html.dark-mode {
 
   .content {
     padding: 16px;
+    gap: 16px;
   }
 }
 
@@ -124,7 +135,7 @@ html.dark-mode {
     width: 100%;
     height: auto;
     position: relative;
-    padding: 10px;
+    padding: 10px 0;
   }
 
   .sidebar.collapsed {

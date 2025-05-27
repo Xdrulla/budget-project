@@ -8,3 +8,74 @@
 @import "_categoryExpenseList";
 @import "_budget";
 @import "_budget-form";
+
+.dark-mode {
+
+  html,
+  body {
+    background-color: #121212;
+  }
+
+  .ant-card,
+  .budget-card,
+  .expense-list,
+  .category-panel,
+  .expense-row {
+    background-color: #1f1f1f !important;
+    color: #fff;
+    border-color: #333 !important;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+  }
+
+  .ant-form-item-label>label,
+  .ant-typography,
+  .budget-title {
+    color: #fff !important;
+  }
+
+  .ant-input,
+  .ant-input-number,
+  .ant-picker,
+  .ant-select-selector {
+    background-color: #2a2a2a !important;
+    color: #fff !important;
+    border-color: #555 !important;
+  }
+
+  .ant-input-number input,
+  .ant-input input,
+  .ant-picker input,
+  .ant-select-selection-item {
+    background-color: transparent !important;
+    color: #fff !important;
+  }
+
+  .ant-input::placeholder,
+  .ant-picker input::placeholder,
+  .ant-select-selection-placeholder {
+    color: #aaa !important;
+  }
+
+  .ant-checkbox-wrapper {
+    color: #fff !important;
+  }
+
+  .ant-checkbox-inner {
+    background-color: #2a2a2a !important;
+    border-color: #999 !important;
+  }
+
+  .ant-btn {
+    color: #fff !important;
+  }
+
+  .ant-btn:not(.ant-btn-primary):not(.ant-btn-danger) {
+    background-color: #333 !important;
+    border-color: #444 !important;
+  }
+
+  .ant-select-dropdown {
+    background-color: #2a2a2a !important;
+    color: #fff !important;
+  }
+}

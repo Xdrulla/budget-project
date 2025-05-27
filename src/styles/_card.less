@@ -1,13 +1,18 @@
+// =========================
+// ANT CARD - MODO CLARO
+// =========================
+
 .ant-card {
-  background-color: #ffffff !important;
+  background-color: #ffffff;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   width: 100%;
   max-width: 800px;
   padding: 24px;
+  border-radius: 8px;
 
   &-head-title,
   .ant-form-item-label>label {
-    color: @dark-background !important;
+    color: @dark-background;
   }
 
   .ant-input-number,
@@ -19,49 +24,102 @@
   .ant-input-number input,
   .ant-input input,
   .ant-picker input {
-    color: #000000 !important;
+    color: #000;
   }
 
   .ant-btn-primary {
-    background-color: @primary-color !important;
-    border-color: @primary-color !important;
+    background-color: @primary-color;
+    border-color: @primary-color;
     width: auto;
   }
 
   .ant-btn-danger {
-    background-color: #ff4d4f !important;
-    border-color: #ff4d4f !important;
+    background-color: #ff4d4f;
+    border-color: #ff4d4f;
   }
 }
 
+.ant-btn-primary {
+  background-color: @primary-color;
+  border-color: @primary-color;
+  color: #fff;
+}
+
+.ant-btn-danger {
+  background-color: #ff4d4f;
+  border-color: #ff4d4f;
+  color: #fff;
+}
+
+.ant-checkbox-wrapper {
+  color: #000;
+}
+
+// =========================
+// MODO ESCURO
+// =========================
+
 .dark-mode {
   .ant-card {
-    background-color: @secondary-color !important;
+    background-color: #1f1f1f !important;
     color: #fff;
 
-    .ant-form-item-label>label,
+    .ant-form-item-label>label {
+      color: #fff !important;
+    }
+
+    .ant-input-number input,
     .ant-input input,
     .ant-picker input {
       color: #fff !important;
+    }
+
+    .ant-input-number,
+    .ant-picker,
+    .ant-input,
+    .ant-select-selector {
+      background-color: #2a2a2a !important;
+      border-color: #444 !important;
+      color: #fff !important;
+    }
+
+    .ant-select-selection-placeholder,
+    .ant-picker input::placeholder,
+    .ant-input::placeholder {
+      color: #aaa !important;
+    }
+
+    .ant-btn {
+      color: #fff;
     }
   }
 
   .ant-btn-primary {
     background-color: @primary-color !important;
     border-color: @primary-color !important;
+    color: #fff;
   }
 
   .ant-btn-danger {
     background-color: #ff4d4f !important;
     border-color: #ff4d4f !important;
+    color: #fff;
   }
 
   .ant-checkbox-wrapper {
     color: #fff !important;
   }
+
+  .ant-checkbox-inner {
+    background-color: #2a2a2a !important;
+    border-color: #888 !important;
+  }
 }
 
-/* Media Queries */
+// =========================
+// RESPONSIVIDADE
+// =========================
+
 @media (max-width: 768px) {
 
   .App-header,

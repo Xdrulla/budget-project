@@ -1,108 +1,252 @@
-.budget-card {
-  width: 100%;
-  max-width: 1200px;
-  background-color: #ffffff !important;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  padding: 40px;
+// =============================
+// MODO CLARO
+// =============================
+
+.category-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.category-delete-button {
   border-radius: 8px;
 }
 
-.budget-title {
-  text-align: center;
-  color: @primary-color;
-}
-
-.expense-list {
-  height: 400px;
-  width: 566px;
-  overflow-y: scroll;
+.category-panel {
+  background-color: #f7f7f7;
+  border-radius: 8px;
+  margin-bottom: 16px;
   border: 1px solid #ddd;
-  padding: 16px;
-  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.expense-row {
   background-color: #fff;
+  margin-bottom: 16px;
+  border-radius: 6px;
+  padding: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
 }
 
-.budget-button-container {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
+.expense-input,
+.expense-input-number,
+.expense-button {
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 4px;
 }
 
-.budget-button {
+.expense-add-button {
+  width: 100%;
+  margin-top: 10px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.category-form {
+  margin-top: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.new-category-input {
   border-radius: 8px;
 }
 
+// =============================
+// MODO ESCURO
+// =============================
+
 .dark-mode {
-  background-color: #333;
-  color: white;
-}
-
-.budget-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 20px 12px;
-}
-
-.budget-header {
-  width: 100%;
-  max-width: 800px;
-  margin-bottom: 20px;
-}
-
-@media (max-width: 420px) {
-  .budget-card {
-    padding: 20px;
-    box-shadow: none;
-    border-radius: 0;
+  .category-panel {
+    background-color: #1f1f1f !important;
+    border-color: #333 !important;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
   }
 
-  .budget-title {
-    font-size: 20px;
+  .category-header {
+    color: #fff;
   }
 
-  .expense-list {
-    width: 100% !important;
-    height: auto;
-    max-height: 300px;
-    overflow-y: auto;
+  .expense-row {
+    background-color: #1f1f1f !important;
+    border: 1px solid #444 !important;
+    color: #fff;
     padding: 12px;
   }
 
-  .budget-header {
-    max-width: 100%;
-    margin-bottom: 10px;
+  .expense-input,
+  .expense-input-number,
+  .ant-input,
+  .ant-input-number,
+  .ant-input input,
+  .ant-input-number input {
+    background-color: #2a2a2a !important;
+    color: #fff !important;
+    border-color: #555 !important;
   }
 
+  .expense-button,
+  .ant-btn-danger,
+  .ant-btn {
+    color: #fff !important;
+    background-color: #ff4d4f !important;
+    border-color: #ff4d4f !important;
+  }
+
+  .ant-checkbox-wrapper {
+    color: #fff !important;
+  }
+
+  .ant-checkbox-inner {
+    background-color: #2a2a2a !important;
+    border-color: #999 !important;
+  }
+
+  .ant-select-selector {
+    background-color: #2a2a2a !important;
+    border-color: #555 !important;
+    color: #fff !important;
+  }
+
+  .ant-select-selection-item {
+    color: #fff !important;
+  }
+
+  .ant-select-selection-placeholder {
+    color: #aaa !important;
+  }
+
+  .ant-form-item-label>label,
+  label {
+    color: #fff !important;
+  }
+
+  .new-category-input {
+    background-color: #2a2a2a !important;
+    color: #fff !important;
+    border-color: #555 !important;
+  }
+
+  .expense-add-button {
+    background-color: #2a2a2a;
+    color: #fff;
+    border-color: #444;
+
+    &:hover {
+      background-color: #333;
+    }
+  }
+}
+
+// =============================
+// RESPONSIVIDADE
+// =============================
+
+@media (max-width: 420px) {
+  .category-panel {
+    padding: 10px;
+    margin-bottom: 12px;
+  }
+
+  .category-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 16px;
+  }
+
+  .expense-row {
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 16px;
+
+    .ant-col {
+      max-width: 100% !important;
+    }
+
+    .expense-input,
+    .expense-input-number,
+    .expense-button {
+      width: 100% !important;
+    }
+  }
+
+  .expense-add-button {
+    width: 100%;
+    font-size: 15px;
+  }
+
+  .category-form {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .new-category-input {
+    width: 100%;
+    font-size: 15px;
+  }
+
+  .ant-form-item {
+    width: 100%;
+    margin-bottom: 8px;
+  }
+
+  .ant-btn {
+    font-size: 15px;
+  }
+}
+
+// BOTÕES DO FORMULÁRIO DE ORÇAMENTO (Mobile + Desktop)
+.budget-button {
+  padding: 10px 16px;
+  font-size: 16px;
+  border-radius: 8px;
+  text-align: center;
+  min-width: 140px;
+}
+
+// BOTÕES EM MODO ESCURO
+.dark-mode {
+  .budget-button {
+    background-color: @primary-color !important;
+    color: #fff !important;
+    border-color: @primary-color !important;
+
+    &:hover {
+      background-color: darken(@primary-color, 8%) !important;
+      border-color: darken(@primary-color, 8%) !important;
+    }
+  }
+
+  .ant-btn-danger {
+    background-color: #ff4d4f !important;
+    border-color: #ff4d4f !important;
+    color: #fff !important;
+
+    &:hover {
+      background-color: darken(#ff4d4f, 6%) !important;
+      border-color: darken(#ff4d4f, 6%) !important;
+    }
+  }
+}
+
+// RESPONSIVIDADE PARA BOTÕES
+@media (max-width: 420px) {
   .budget-button-container {
     flex-direction: column;
-    gap: 10px;
     align-items: stretch;
+    gap: 12px;
+    margin-top: 16px;
   }
 
   .budget-button {
-    width: 100%;
-  }
-
-  .ant-select,
-  .ant-input,
-  .ant-form-item {
     width: 100% !important;
-  }
-
-  canvas {
-    max-width: 100% !important;
-    height: auto !important;
-  }
-
-  .ant-row {
-    flex-direction: column !important;
-  }
-
-  .ant-col {
-    max-width: 100% !important;
+    font-size: 16px !important;
+    padding: 12px !important;
   }
 }
