@@ -36,6 +36,12 @@ const Budget = ({ isDarkMode }) => {
     Educação: [],
     Lazer: []
   })
+  const [categoryGoals, setCategoryGoals] = useState({
+    Moradia: 0,
+    Transporte: 0,
+    Educação: 0,
+    Lazer: 0
+  })
   const [month, setMonth] = useState(null)
   const [totalIncome, setTotalIncome] = useState(0)
   const [totalExpenses, setTotalExpenses] = useState(0)
@@ -108,6 +114,16 @@ const Budget = ({ isDarkMode }) => {
         setSalary(budgetData.salary)
         setApplyDiscount(budgetData.applyDiscount)
         setOtherIncome(budgetData.otherIncome)
+        if (budgetData.categoryGoals) {
+          setCategoryGoals(budgetData.categoryGoals)
+        } else {
+          setCategoryGoals({
+            Moradia: 0,
+            Transporte: 0,
+            Educação: 0,
+            Lazer: 0
+          })
+        }
 
         if (budgetData.expenses) {
           setExpenses(budgetData.expenses)
@@ -143,6 +159,16 @@ const Budget = ({ isDarkMode }) => {
               Lazer: []
             })
           }
+          if (previousBudgetData.categoryGoals) {
+            setCategoryGoals(previousBudgetData.categoryGoals)
+          } else {
+            setCategoryGoals({
+              Moradia: 0,
+              Transporte: 0,
+              Educação: 0,
+              Lazer: 0
+            })
+          }
         } else {
           setExpenses({
             Moradia: [],
@@ -150,11 +176,23 @@ const Budget = ({ isDarkMode }) => {
             Educação: [],
             Lazer: []
           })
+          setCategoryGoals({
+            Moradia: 0,
+            Transporte: 0,
+            Educação: 0,
+            Lazer: 0
+          })
         }
 
         setSalary(0)
         setApplyDiscount(false)
         setOtherIncome(0)
+        setCategoryGoals({
+          Moradia: 0,
+          Transporte: 0,
+          Educação: 0,
+          Lazer: 0
+        })
       }
     } catch (error) {
       console.error('Erro ao recuperar orçamento:', error)
@@ -183,6 +221,12 @@ const Budget = ({ isDarkMode }) => {
         setApplyDiscount(false)
         setOtherIncome(0)
         setExpenses([{ id: uuidv4(), name: '', value: 0, fixed: false }])
+        setCategoryGoals({
+          Moradia: 0,
+          Transporte: 0,
+          Educação: 0,
+          Lazer: 0
+        })
         setMonth(null)
       } catch (error) {
         console.error('Erro ao deletar o documento:', error)
@@ -235,6 +279,13 @@ const Budget = ({ isDarkMode }) => {
     })
   }
 
+  const handleGoalChange = (category, value) => {
+    setCategoryGoals({
+      ...categoryGoals,
+      [category]: value || 0
+    })
+  }
+
   const handleSubmit = async () => {
     if (!month) {
       message.error('Por favor, selecione o mês.')
@@ -256,6 +307,7 @@ const Budget = ({ isDarkMode }) => {
       totalExpenses,
       remainingBalance,
       expenses,
+      categoryGoals,
     }
 
     try {
@@ -358,7 +410,9 @@ const Budget = ({ isDarkMode }) => {
             <div className="expense-list">
               <CategoryExpenseList
                 expenses={expenses}
+                categoryGoals={categoryGoals}
                 handleExpenseChange={handleExpenseChange}
+                handleGoalChange={handleGoalChange}
                 addExpense={addExpense}
                 removeExpense={removeExpense}
                 setExpenses={setExpenses}

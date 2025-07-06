@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Collapse, Row, Col, Input, InputNumber, Checkbox, Button, Form, message } from 'antd'
 import { PlusOutlined, MinusCircleOutlined, DeleteOutlined } from '@ant-design/icons'
+import CategoryProgressBar from './CategoryProgressBar'
 
 const { Panel } = Collapse
 
@@ -11,7 +12,7 @@ const initialCategories = {
   Lazer: ['Cinema', 'Viagens'],
 }
 
-const CategoryExpenseList = ({ expenses, handleExpenseChange, addExpense, removeExpense, setExpenses }) => {
+const CategoryExpenseList = ({ expenses, categoryGoals, handleExpenseChange, handleGoalChange, addExpense, removeExpense, setExpenses }) => {
   const [categories, setCategories] = useState(initialCategories)
   const [newCategoryName, setNewCategoryName] = useState('')
 
@@ -36,6 +37,10 @@ const CategoryExpenseList = ({ expenses, handleExpenseChange, addExpense, remove
 
   const getCategoryExpenses = (category) => {
     return Array.isArray(expenses[category]) ? expenses[category] : []
+  }
+
+  const getCategoryGoal = (category) => {
+    return categoryGoals && categoryGoals[category] ? categoryGoals[category] : 0
   }
 
   const calculateCategoryTotal = (category) => {
@@ -88,6 +93,21 @@ const CategoryExpenseList = ({ expenses, handleExpenseChange, addExpense, remove
             key={category}
             className="category-panel"
           >
+            <Row gutter={16} style={{ marginBottom: 10 }}>
+              <Col span={12}>
+                <InputNumber
+                  placeholder="Meta"
+                  className="category-goal-input"
+                  value={getCategoryGoal(category)}
+                  onChange={(value) => handleGoalChange(category, value)}
+                  formatter={(value) => `R$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                  parser={(value) => value.replace(/R\$\s?|(,*)/g, '')}
+                />
+              </Col>
+              <Col span={12}>
+                <CategoryProgressBar total={calculateCategoryTotal(category)} goal={getCategoryGoal(category)} />
+              </Col>
+            </Row>
             {getCategoryExpenses(category).map((expense, index) => (
               <Row key={expense.id} gutter={16} className="expense-row">
                 <Col xs={24} md={8}>
