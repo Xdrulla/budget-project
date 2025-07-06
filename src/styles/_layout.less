@@ -170,3 +170,35 @@ html.dark-mode .content {
     font-size: 12px;
   }
 }
+
+/* ===== Mobile specific layout ===== */
+.mobile-menu {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.mobile-layout .content {
+  padding-bottom: 60px;
+}
+
+.mobile-menu .ant-menu {
+  display: flex;
+  justify-content: space-around;
+}
+
+.mobile-menu .ant-menu-item {
+  flex: 1;
+  text-align: center;
+}
+
+.light-mode .mobile-menu {
+  background-color: #fff;
+}
+
+.dark-mode .mobile-menu {
+  background-color: #1f1f1f;
+}

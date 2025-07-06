@@ -8,6 +8,7 @@ import LoginSection from './Login'
 import Register from './Register'
 import UserProfile from './components/UserProfile'
 import AppMenu from './components/Menu'
+import MobileMenu from './components/MobileMenu'
 import { logout } from './services/auth'
 import { Button } from 'antd'
 import { BulbOutlined } from '@ant-design/icons'
@@ -17,6 +18,13 @@ const App = () => {
   const [user, setUser] = useState(null)
   const [isRegistering, setIsRegistering] = useState(false)
   const [isDarkMode, setIsDarkMode] = useState(false)
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768)
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 768)
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
 
   useEffect(() => {
     const auth = getAuth()
@@ -46,12 +54,14 @@ const App = () => {
 
   return (
     <Router>
-      <div className="App">
+      <div className={`App ${isMobile ? 'mobile-layout' : 'desktop-layout'}`}>
         {user ? (
           <>
-            <div className="sidebar">
-              <AppMenu />
-            </div>
+            {!isMobile && (
+              <div className="sidebar">
+                <AppMenu />
+              </div>
+            )}
             <div className="content">
               <div className="header">
                 <UserProfile user={user} onLogout={handleLogout} />
@@ -72,6 +82,7 @@ const App = () => {
                 <Route path="*" element={<Navigate to="/orcamento" />} />
               </Routes>
             </div>
+            {isMobile && <MobileMenu />}
           </>
         ) : (
           <div className="content">
