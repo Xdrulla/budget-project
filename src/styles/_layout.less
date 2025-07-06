@@ -20,9 +20,11 @@ html.dark-mode {
 }
 
 /* ===== Sidebar ===== */
+
 .sidebar {
   width: var(--sidebar-width);
-  background-color: @secondary-color;
+  background: linear-gradient(180deg, lighten(@secondary-color, 5%), darken(@secondary-color, 5%));
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
   z-index: 10000;
   position: fixed;
   top: 0;
