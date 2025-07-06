@@ -4,11 +4,15 @@
 
 .ant-card {
   background-color: #ffffff;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   width: 100%;
-  max-width: 800px;
+  max-width: 900px;
   padding: 24px;
-  border-radius: 8px;
+  border-radius: 10px;
+  border-top: 4px solid @primary-color;
+  .budget-title {
+    color: @primary-color;
+  }
 
   &-head-title,
   .ant-form-item-label>label {
@@ -63,6 +67,10 @@
   .ant-card {
     background-color: #1f1f1f !important;
     color: #fff;
+    border-top: 4px solid @primary-color;
+    .budget-title {
+      color: @primary-color;
+    }
 
     .ant-form-item-label>label {
       color: #fff !important;
