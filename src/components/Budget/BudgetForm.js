@@ -1,5 +1,6 @@
 import React from 'react';
 import { Form, InputNumber, Switch, DatePicker, Row, Col, Select } from 'antd'
+import { Banknote, Calendar, Coins } from 'lucide-react'
 
 const { Option } = Select
 
@@ -19,7 +20,7 @@ const BudgetForm = ({
       <div className="budget-form">
         <Row gutter={16}>
           <Col xs={24} md={12}>
-            <Form.Item label="Salário">
+            <Form.Item label={<span><Banknote size={16} style={{marginRight:4}}/>Salário</span>}>
               <InputNumber
                 style={{ width: '100%', borderRadius: '8px' }}
                 value={salary}
@@ -58,7 +59,7 @@ const BudgetForm = ({
 
         <Row gutter={16}>
           <Col xs={24} md={12}>
-            <Form.Item label="Outras Rendas">
+            <Form.Item label={<span><Coins size={16} style={{marginRight:4}}/>Outras Rendas</span>}>
               <InputNumber
                 style={{ width: '100%', borderRadius: '8px' }}
                 value={otherIncome}
@@ -69,7 +70,7 @@ const BudgetForm = ({
             </Form.Item>
           </Col>
           <Col xs={24} md={12}>
-            <Form.Item label="Mês do Orçamento">
+            <Form.Item label={<span><Calendar size={16} style={{marginRight:4}}/>Mês do Orçamento</span>}>
               <DatePicker picker="month" onChange={handleMonthChange} style={{ width: '100%', borderRadius: '8px' }} format="YYYY-MM" />
             </Form.Item>
           </Col>

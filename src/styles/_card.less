@@ -9,6 +9,7 @@
   max-width: 900px;
   padding: 24px;
   border-radius: 10px;
+  transition: box-shadow 0.3s ease;
   border-top: 4px solid @primary-color;
   .budget-title {
     color: @primary-color;
@@ -40,6 +41,10 @@
   .ant-btn-danger {
     background-color: #ff4d4f;
     border-color: #ff4d4f;
+  }
+
+  &:hover {
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
   }
 }
 
