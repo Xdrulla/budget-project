@@ -29,7 +29,8 @@
     "sweetalert2-react-content": "^5.0.7",
     "uuid": "^9.0.1",
     "web-vitals": "^2.1.4",
-    "xlsx": "^0.18.5"
+    "xlsx": "^0.18.5",
+    "lucide-react": "^0.376.0"
   },
   "scripts": {
     "start": "craco start",
